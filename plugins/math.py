@@ -51,6 +51,6 @@ def math(msg, channel, irc):
 	except:
 		IrcSend (irc, "PRIVMSG {0} :>> Error\r\n".format(channel))
 
-def main(msg, channel, irc):
+def main(msg, channel, irc,name):
 	if msg and '!math' in msg:
 		math(msg, channel, irc)

@@ -5,7 +5,7 @@ from time import ctime
 def IrcSend(irc, text):
 	irc.send(str.encode(text))
 
-def main(msg, channel, name, irc):
+def main(msg, channel, irc,name):
 	if msg:
 		try:
 			flood = open("flood.dat","br")
