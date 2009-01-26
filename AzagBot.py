@@ -34,34 +34,33 @@ if "config.cfg" not in os.listdir('.'):
 	config = configparser.RawConfigParser()
 
 	config.add_section('Data')
-	config.set('Data', 'channels', ['#saffire-dev'])
+	config.set('Data', 'channel', '#saffire-dev')
 	config.set('Data', 'user', 'AzagBot')
 	config.set('Data', 'nick', 'AzagBot')
 	config.set('Data', 'password', 'gnu')
 	
 	config.add_section('Channel members')
-	config.set('Channel members', 'wommans', ['elisa', 'maria'])
-	config.set('Channel members', 'OPs', ['azag', 'gnuget'])
+	config.set('Channel members', 'womans', 'elisa')
+	config.set('Channel members', 'OPs', 'azag')
 	config.set('Channel members', 'moderators', ['srinux', 'carlosr'])
 	
-	with open('confid.cfg', 'w') as configfile:
+	with open('config.cfg', 'w') as configfile:
 		config.write(configfile)
 
 # Get information from the config file
 config = configparser.RawConfigParser()
 config.read('config.cfg')
 
-channels = config.getint('Data', 'channels')
-user = config.getint('Data', 'user')
-nick = config.getint('Data', 'nick')
-password = config.getint('Data', 'password')
+channel = config.get('Data', 'channel')
+user = config.get('Data', 'user')
+nick = config.get('Data', 'nick')
+password = config.get('Data', 'password')
 
 # Conectarse al servidor IRC
 irc = socket.socket (socket.AF_INET, socket.SOCK_STREAM)
 irc.connect(("irc.freenode.org", 6667))
 # Ingresar al canal IRC
-for channel in channels:
-	join(irc, nick, user, channel, password)
+join(irc, nick, user, channel, password)
 
 # Log file
 LOG_FILENAME = "everything.log"

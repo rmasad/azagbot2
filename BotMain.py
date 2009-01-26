@@ -82,8 +82,8 @@ def main(nick, channel, irc):
 		config = configparser.RawConfigParser()
 		config.read('config.cfg')
 
-		channels = config.getint('Channel members', 'OPs')
-		user = config.getint('Channel members', 'womans')
+		OPs = config.get('Channel members', 'OPs')
+		user = config.get('Channel members', 'womans')
         
 		data = bytes.decode(irc.recv (4096))
 		print (data)
