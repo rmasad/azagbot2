@@ -83,7 +83,7 @@ def main(nick, channel, irc):
 		config.read('config.cfg')
 
 		OPs = config.get('Channel members', 'OPs')
-		user = config.get('Channel members', 'womans')
+		womans = config.get('Channel members', 'womans')
         
 		data = bytes.decode(irc.recv (4096))
 		print (data)
