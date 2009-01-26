@@ -32,7 +32,7 @@ def get_name(data, channel):
 # Funcion que extrae el nombre del usuario.
 def get_user(data, channel):
 	try:
-		return data[data.find("@"):data.find("!n=") + 3]
+		return data[data.find("!n=") + 3:data.find("@")]
 	except:
 		return False
 
