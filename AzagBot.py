@@ -31,18 +31,28 @@ def join(irc, nick, user, channel, password):
 
 # Config file
 if "config.cfg" not in os.listdir('.'):
+	channel = input("Channel to join: ")
+	user = input("User name: ")
+	nick = input("Nick to use: ")
+	password = input("Password of the account: ")
+
+	OPs = input("Channel OP: ")
+	womans = input("One woman of the channel: ")
+	moderators = input("Channel moderators: ")
+	password = input("Password of the account: ")
+
 	config = configparser.RawConfigParser()
 
 	config.add_section('Data')
-	config.set('Data', 'channel', '#saffire-dev')
-	config.set('Data', 'user', 'AzagBot')
-	config.set('Data', 'nick', 'AzagBot')
-	config.set('Data', 'password', 'gnu')
+	config.set('Data', 'channel', channel)
+	config.set('Data', 'user', user)
+	config.set('Data', 'nick', nick)
+	config.set('Data', 'password', password)
 	
 	config.add_section('Channel members')
-	config.set('Channel members', 'womans', 'elisa')
-	config.set('Channel members', 'OPs', 'azag')
-	config.set('Channel members', 'moderators', ['srinux', 'carlosr'])
+	config.set('Channel members', 'womans', womans)
+	config.set('Channel members', 'OPs', OPs)
+	config.set('Channel members', 'moderators', moderators)
 	
 	with open('config.cfg', 'w') as configfile:
 		config.write(configfile)

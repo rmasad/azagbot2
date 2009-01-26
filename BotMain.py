@@ -21,7 +21,7 @@ import plugin
 import configparser
 
 
-version = 2.0
+version = 2.1
 
 # Funcion que extrae el nombre del usuario.
 def get_name(data, channel):
