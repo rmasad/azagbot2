@@ -41,6 +41,8 @@ def get_msg(data, channel):
 	if 'PRIVMSG {0} :'.format(channel) in data:
 		msg_start = data.find('PRIVMSG {0} :'.format(channel))
 		msg_start += len('PRIVMSG {0} :'.format(channel))
+		if data[msg_start:].strip() == " ":
+			return "Blank"
 		return data[msg_start:].strip()
 	return False
 
