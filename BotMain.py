@@ -17,8 +17,9 @@ import socket
 import logging
 import os
 from time import ctime
-from BotData import womans, OPs
 import plugin
+import configparser
+
 
 version = 2.0
 
@@ -77,6 +78,13 @@ def kick(msg, name, channel, irc):
 # Funcion principal
 def main(nick, channel, irc):
 	try:
+		# Get information from the config file
+		config = configparser.RawConfigParser()
+		config.read('config.cfg')
+
+		channels = config.getint('Channel members', 'OPs')
+		user = config.getint('Channel members', 'womans')
+        
 		data = bytes.decode(irc.recv (4096))
 		print (data)
 

@@ -17,19 +17,55 @@
 import socket
 import logging
 import BotMain
-import BotConnect
-from BotData import *
+import os
+import configparser
+
+
+# Funcion que ingresa el usuario al canal
+def join(irc, nick, user, channel, password):
+	BotMain.IrcSend (irc, 'PASS {0}\r\n'.format(password))
+	BotMain.IrcSend (irc, 'NICK {0}\r\n'.format(nick))
+	BotMain.IrcSend (irc, 'USER {0} {0} {0} :Python IRC\r\n'.format(user))
+	BotMain.IrcSend (irc, 'JOIN {0}\r\n'.format(channel))
+	BotMain.IrcSend (irc, 'PRIVMSG ChanServ :OP {0}\r\n'.format(channel))
+
+# Config file
+if "config.cfg" not in os.listdir('.'):
+	config = configparser.RawConfigParser()
+
+	config.add_section('Data')
+	config.set('Data', 'channels', ['#saffire-dev'])
+	config.set('Data', 'user', 'AzagBot')
+	config.set('Data', 'nick', 'AzagBot')
+	config.set('Data', 'password', 'gnu')
+	
+	config.add_section('Channel members')
+	config.set('Channel members', 'wommans', ['elisa', 'maria'])
+	config.set('Channel members', 'OPs', ['azag', 'gnuget'])
+	config.set('Channel members', 'moderators', ['srinux', 'carlosr'])
+	
+	with open('confid.cfg', 'w') as configfile:
+		config.write(configfile)
+
+# Get information from the config file
+config = configparser.RawConfigParser()
+config.read('config.cfg')
+
+channels = config.getint('Data', 'channels')
+user = config.getint('Data', 'user')
+nick = config.getint('Data', 'nick')
+password = config.getint('Data', 'password')
 
 # Conectarse al servidor IRC
 irc = socket.socket (socket.AF_INET, socket.SOCK_STREAM)
 irc.connect(("irc.freenode.org", 6667))
 # Ingresar al canal IRC
-BotConnect.join(irc, nick, user, channel, password)
+for channel in channels:
+	join(irc, nick, user, channel, password)
 
 # Log file
 LOG_FILENAME = "everything.log"
 logging.basicConfig(filename=LOG_FILENAME,level=logging.NOTSET)
-
 
 # Funcion principal
 while __name__ == "__main__":
