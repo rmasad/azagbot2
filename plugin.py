@@ -1,7 +1,7 @@
 import os
 
 #class  plugins:
-def main(name,msg,user,advice,channel,irc): 
+def main(nick, name,msg,user,advice, was_kick,channel,irc, OPs, womans, is_op): 
     plugins =  os.listdir("plugins")
 
 
@@ -18,4 +18,4 @@ def main(name,msg,user,advice,channel,irc):
     for element in plugins:
         if element != "__init__.py":
             if element[len(element)-3:]  == ".py":
-                exec(element[:-3] + ".main(msg,channel,irc,name)")
+                exec(element[:-3] + ".main(nick, name,msg,user,advice, was_kick,channel,irc, OPs, womans, is_op)")

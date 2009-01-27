@@ -22,60 +22,54 @@ import configparser
 
 
 # Funcion que ingresa el usuario al canal
-def join(irc, nick, user, channel, password):
+def join(irc, nick, user, channel, password, is_op):
 	BotMain.IrcSend (irc, 'PASS {0}\r\n'.format(password))
 	BotMain.IrcSend (irc, 'NICK {0}\r\n'.format(nick))
 	BotMain.IrcSend (irc, 'USER {0} {0} {0} :Python IRC\r\n'.format(user))
 	BotMain.IrcSend (irc, 'JOIN {0}\r\n'.format(channel))
-	BotMain.IrcSend (irc, 'PRIVMSG ChanServ :OP {0}\r\n'.format(channel))
+	if is_op:
+		BotMain.IrcSend (irc, 'PRIVMSG ChanServ :OP {0}\r\n'.format(channel))
 
-# Config file
 if "config.cfg" not in os.listdir('.'):
-	channel = input("Channel to join: ")
-	user = input("User name: ")
-	nick = input("Nick to use: ")
-	password = input("Password of the account: ")
-
-	OPs = input("Channel OP: ")
-	womans = input("One woman of the channel: ")
-	moderators = input("Channel moderators: ")
-	password = input("Password of the account: ")
-
-	config = configparser.RawConfigParser()
-
-	config.add_section('Data')
-	config.set('Data', 'channel', channel)
-	config.set('Data', 'user', user)
-	config.set('Data', 'nick', nick)
-	config.set('Data', 'password', password)
-	
-	config.add_section('Channel members')
-	config.set('Channel members', 'womans', womans)
-	config.set('Channel members', 'OPs', OPs)
-	config.set('Channel members', 'moderators', moderators)
-	
-	with open('config.cfg', 'w') as configfile:
-		config.write(configfile)
+	import BotConfig
+	BotConfig.main()
 
 # Get information from the config file
 config = configparser.RawConfigParser()
 config.read('config.cfg')
-
-channel = config.get('Data', 'channel')
+channel = config.get("Settings", 'channel')
 user = config.get('Data', 'user')
 nick = config.get('Data', 'nick')
 password = config.get('Data', 'password')
+is_op = config.getboolean("Settings", "is_op")
 
 # Conectarse al servidor IRC
 irc = socket.socket (socket.AF_INET, socket.SOCK_STREAM)
 irc.connect(("irc.freenode.org", 6667))
 # Ingresar al canal IRC
-join(irc, nick, user, channel, password)
+join(irc, nick, user, channel, password, is_op)
 
 # Log file
 LOG_FILENAME = "everything.log"
 logging.basicConfig(filename=LOG_FILENAME,level=logging.NOTSET)
 
+if config.getboolean("Settings", "non_flood"):
+	flood_name = user
+	flood_times = 0
+
 # Funcion principal
 while __name__ == "__main__":
-	BotMain.main(nick, channel, irc)
+	data = bytes.decode(irc.recv(4096))
+	BotMain.main(data, nick, channel, irc, is_op)
+
+	if config.getboolean("Settings", "non_flood"):
+		if BotMain.get_msg(data, channel):
+			if BotMain.get_name(data, channel) == flood_name:
+				flood_times += 1
+			else:
+				flood_name = BotMain.get_name(data, channel)
+				flood_time = 0
+	
+	if flood_times == 10:
+		BotMain.kick("!kick {0} flood".format(flood_name), nick, channel, irc)
+		flood_times = 0

@@ -1,7 +1,7 @@
 from math import *
 
 def IrcSend(irc, text):
-	irc.send(str.encode(text))
+    irc.send(str.encode(text))
 
 def math(msg, channel, irc):
 
@@ -10,12 +10,17 @@ def math(msg, channel, irc):
 			return 'Error'
 		else:
 			return x**y
+    
+	def c_interest(initial, percentage, periods):
+		return initial*(1 + percentage/100)**periods
 
 	msg = msg[6:] 
 
 	safe_list = ['+', '-', '*', '/', '%',
 				 # Numeros
 				 '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+				 # Financias
+				 'c_interest',
 				 # Elevado, raiz y logaritmo
 				 'el', 'sqrt',
 				 'log', 'log10',
@@ -51,6 +56,6 @@ def math(msg, channel, irc):
 	except:
 		IrcSend (irc, "PRIVMSG {0} :>> Error\r\n".format(channel))
 
-def main(msg, channel, irc,name):
+def main(nick, name,msg,user,advice,was_kick,channel,irc, OPs, womans, is_op):
 	if msg and '!math' in msg:
 		math(msg, channel, irc)
