@@ -14,23 +14,65 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/
 
+import os
 import socket
 import logging
 import BotMain
-import BotConnect
-from BotData import *
+import configparser
+from time import ctime
 
-# Conectarse al servidor IRC
-irc = socket.socket (socket.AF_INET, socket.SOCK_STREAM)
-irc.connect(("irc.freenode.org", 6667))
-# Ingresar al canal IRC
-BotConnect.join(irc, nick, user, channel, password)
+logging.basicConfig(filename="everything.log",level=logging.NOTSET)
 
-# Log file
-LOG_FILENAME = "everything.log"
-logging.basicConfig(filename=LOG_FILENAME,level=logging.NOTSET)
+try:
+	# Get information from the config file
+	config = configparser.RawConfigParser()
+	config.read('config.cfg')
+	bot_user = config.get('Data', 'user')
+	bot_nick = config.get('Data', 'nick')
+	bot_password = config.get('Data', 'password')
+	ops = config.options("Operators")
+	womans = config.options("Womans")
+except:
+	import BotConfig
+	BotConfig.main()
+	exit()
+	
+# Connect and loggin
+irc = BotMain.connect(bot_nick, bot_user, bot_password)
+for channel in config.options("Channels"):
+	BotMain.join("#" + channel, config, irc)
 
+for plugin in config.options("Plugins"):
+	exec("from plugins import {0}".format(plugin))
 
 # Funcion principal
 while __name__ == "__main__":
-	BotMain.main(nick, channel, irc)
+	try:
+		#data = bytes.decode(irc.recv(4096))
+		data = bytes.decode(irc.recv(6667))
+				
+		type_data, msg, msg_channel, msg_nick, msg_user = BotMain.parse_data(data)
+		if type_data == "PRIVMSG" and msg.lower() == "@exit" and msg_user in ops:
+			exit()
+		
+		parsed_data = {"bot_nick": bot_nick,
+					   "bot_user": bot_user,
+					   "bot_password": bot_password,
+					   "config": config,
+					   "ops": ops,
+					   "womans": womans,
+					   "type_data": type_data,
+					   "msg": msg,
+					   "channel_list": config.options("Channels"),
+					   "msg_channel": msg_channel,
+					   "msg_nick": msg_nick,
+					   "msg_user": msg_user}
+		
+		for plugin in config.options("Plugins"):
+			exec("{0}.main(parsed_data,irc)".format(plugin))
+		
+		print(data)
+		
+	except UnicodeDecodeError:
+		logging.basicConfig(level="logging.ERROR")
+		logging.error("{0}: UnicodeDecodeError".format(ctime()))
