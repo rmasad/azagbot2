@@ -1,11 +1,5 @@
 from math import *
-<<<<<<< HEAD:plugins/math.py
 from BotMain import IrcSend
-=======
-
-def IrcSend(irc, text):
-    irc.send(str.encode(text))
->>>>>>> 82b338862860eb47c0a9830d1cf96c80a0e3594e:plugins/math.py
 
 def math(msg, channel, irc):
 
@@ -60,12 +54,6 @@ def math(msg, channel, irc):
 	except:
 		IrcSend (irc, "PRIVMSG {0} :>> Error\r\n".format(channel))
 
-<<<<<<< HEAD:plugins/math.py
 def main(parsed_data, irc):
 	if parsed_data["type_data"] == "PRIVMSG" and '@math' in parsed_data["msg"]:
 		math(parsed_data["msg"], parsed_data["msg_channel"], irc)
-=======
-def main(nick, name,msg,user,advice,was_kick,channel,irc, OPs, womans, is_op):
-	if msg and '!math' in msg:
-		math(msg, channel, irc)
->>>>>>> 82b338862860eb47c0a9830d1cf96c80a0e3594e:plugins/math.py
