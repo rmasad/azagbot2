@@ -25,8 +25,10 @@ def main():
 	config.set("Operators", "AzagBot", "")
 	
 	config.add_section("Channels")
+	config.set("Channels", "channel_list", '"#saffire-dev, #supremos"')
 	config.set("Channels", "Supremos", "off")
-
+	config.set("Channels", "saffire-dev", "on")
+	
 	config.add_section("Plugins")
 	config.set("Plugins", "math", "")
 	config.set("Plugins", "kick", "")

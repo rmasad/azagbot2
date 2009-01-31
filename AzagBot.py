@@ -39,7 +39,7 @@ except:
 	
 # Connect and loggin
 irc = BotMain.connect(bot_nick, bot_user, bot_password)
-chs = config.options("Channels").get("chans", "#saffire-dev").split(",")
+channel_list = config.get("Channels", "channel_list").replace('"',"").replace(' ',"").split(",")
 for channel in chs:
 	BotMain.join(channel, config, irc)
 

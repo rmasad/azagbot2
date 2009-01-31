@@ -14,7 +14,7 @@ def connect(nick, user, password, HOST = 'irc.freenode.net', PORT = 6667):
 
 def join(channel, config, irc):
 	irc.send(str.encode('JOIN {0}\r\n'.format(channel)))
-	if config.getboolean('Channels', channel[1:]):
+	if config.getboolean('Channels', channel.replace("#","")):
 		irc.send(str.encode('PRIVMSG ChanServ :OP {0}\r\n'.format(channel)))
 
 def parse_data(data):
