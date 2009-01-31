@@ -48,9 +48,9 @@ for plugin in config.options("Plugins"):
 # Funcion principal
 while __name__ == "__main__":
 	try:
-		#data = bytes.decode(irc.recv(4096))
-		data = bytes.decode(irc.recv(6667))
-				
+		data = bytes.decode(irc.recv(4096))
+		print(data)
+		
 		type_data, msg, msg_channel, msg_nick, msg_user = BotMain.parse_data(data)
 		if type_data == "PRIVMSG" and msg.lower() == "@exit" and msg_user in ops:
 			exit()
@@ -70,8 +70,6 @@ while __name__ == "__main__":
 		
 		for plugin in config.options("Plugins"):
 			exec("{0}.main(parsed_data,irc)".format(plugin))
-		
-		print(data)
 		
 	except UnicodeDecodeError:
 		logging.basicConfig(level="logging.ERROR")

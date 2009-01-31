@@ -14,20 +14,20 @@ def main(data, irc):
 				'!v': 'AzagBot versión {0}\r\n'.format(version),
 				'!version': 'AzagBot versión {0}\r\n'.format(version)}
 		
-	op_response = {'!op': 'El señor {0} ahora es operado de {1}\r\n'.format(name, channel),
-				   '!deop': 'El señor {0} ya no es operado de {1}\r\n'.format(name, channel),
-				   '!chao': 'Adios señores y señoras de {0}.\r\n'.format(channel)}
+	op_response = {'@op': 'El señor {0} ahora es operador de {1}\r\n'.format(name, channel),
+				   '@deop': 'El señor {0} ya no es operador de {1}\r\n'.format(name, channel),
+				   '@chao': 'Adios señores y señoras de {0}.\r\n'.format(channel)}
 	
 	if msg:
 		if user in OPs:
-			if msg == '!chao':
+			if msg == '@chao':
 				IrcSend (irc, "QUIT AzagBot {0}\r\n".format(version))
 				exit()
 	
-			if msg == '!op':
+			if msg == '@op':
 				IrcSend (irc, "PRIVMSG ChanServ :OP {0} {1}\r\n".format(channel, name))
 
-			if msg == '!deop':
+			if msg == '@deop':
 				IrcSend (irc, "PRIVMSG ChanServ :DEOP {0} {1}\r\n".format(channel, name))
 								
 			if msg.lower() in op_response:

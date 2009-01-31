@@ -1,15 +1,16 @@
+import configparser
 import pickle
 import logging
 from time import ctime
 from BotMain import IrcSend
-from BotMain import kick
+from BotMain import kick, ban
 from time import ctime
 
 def main(data, irc):
-	msg = data["msg"]
+	type_msg = data["type_data"]
 	channel = data["msg_channel"]
 	name = data["msg_nick"]
-	if msg:
+	if type_msg == "PRIVMSG":
 		try:
 			flood = open("flood.dat","br")
 			nick = pickle.load(flood)
@@ -25,7 +26,12 @@ def main(data, irc):
 			flood = open("flood.dat","bw")
 
 			if time == 10:
-				kick(name, data["bot_nick"], "flood", data["msg_channel"], irc)
+				config = configparser.RawConfigParser()
+				config.read('config.cfg')
+				if config.get('Plugins', 'flood') == "kick":
+					kick(name, data["bot_nick"], "flood", data["msg_channel"], irc)
+				if config.get('Plugins', 'flood') == "kick":
+					ban(name, data["bot_nick"], "flood", data["msg_channel"], irc)
 				time = 0
 
 			pickle.dump(name, flood)

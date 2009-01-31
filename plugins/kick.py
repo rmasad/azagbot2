@@ -2,7 +2,7 @@ from BotMain import kick
 
 # Funcion para sacar (kick) a alguien del canal
 def main(data, irc):
-	if "!kick" in data["msg"] and data["msg_user"] in data["ops"]:
+	if "@kick" in data["msg"] and data["msg_user"] in data["ops"]:
 		msg = data["msg"].replace("@kick ", "")
 		end_name = msg.find(" ")
 		if end_name == -1:

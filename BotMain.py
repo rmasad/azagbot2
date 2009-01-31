@@ -4,9 +4,9 @@ from time import ctime
 import configparser
 
 # Funcion que ingresa el usuario al canal
-def connect(nick, user, password):
-	irc = socket.socket (socket.AF_INET, socket.SOCK_STREAM)
-	irc.connect(("irc.freenode.org", 6667))
+def connect(nick, user, password, HOST = 'irc.freenode.net', PORT = 6667):
+	irc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	irc.connect((HOST, PORT))
 	irc.send(str.encode('PASS {0}\r\n'.format(password)))
 	irc.send(str.encode('NICK {0}\r\n'.format(nick)))
 	irc.send(str.encode('USER {0} {0} {0} :Python IRC\r\n'.format(user)))
@@ -39,7 +39,7 @@ def parse_data(data):
 			return ("SERVERMSG", "QUIT", msg_channel, data[1:data.find("!")], data[data.find("!n=") + 3:data.find("@")])
 		elif 'KICK' in data:
 			msg_channel = data[data.find("KICK")+5:]
-			msg_channel = msg_channel.split(" :")
+			msg_channel = msg_channel.split(" ")
 			msg = msg_channel[1]
 			msg_channel = msg_channel[0]
 			return ("KICK", msg.strip(), msg_channel, data[1:data.find("!")], data[data.find("!n=") + 3:data.find("@")])
@@ -58,3 +58,16 @@ def kick(kicked, kicker, reason, channel, irc):
 	logging.basicConfig(level="logging.INFO")
 	logging.info("{0}: {1} make a KICK to {2} becouse {3} in the channel {4}".format(ctime(), kicker, kicked, reason, channel))
 
+
+def ban(banned, banner, reason, channel, irc):
+	IrcSend (irc, 'PRIVMSG ChanServ :AKICK {0} ADD {1}\r\n'.format(channel, banned))
+	kick(banned, banner, reason, channel, irc)
+	# Registro de la expulsion.
+	logging.basicConfig(level="logging.INFO")
+	logging.info("{0}: {1} make a AKICK ADD to {2} becouse {3} in the channel {4}".format(ctime(), banner, banned, reason, channel))
+
+def unban(banned, banner, reason, channel, irc):
+	IrcSend (irc, 'PRIVMSG ChanServ :AKICK {0} DEL {1}\r\n'.format(channel, banned))
+	# Registro de la expulsion.
+	logging.basicConfig(level="logging.INFO")
+	logging.info("{0}: {1} make a AKICK DEL to {2} becouse {3} in the channel {4}".format(ctime(), banner, banned, reason, channel))
