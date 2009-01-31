@@ -63,6 +63,7 @@ while __name__ == "__main__":
 					   "womans": womans,
 					   "type_data": type_data,
 					   "msg": msg,
+					   "data": data,
 					   "channel_list": config.options("Channels"),
 					   "msg_channel": msg_channel,
 					   "msg_nick": msg_nick,

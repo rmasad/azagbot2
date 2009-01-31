@@ -30,7 +30,7 @@ def main(data, irc):
 				config.read('config.cfg')
 				if config.get('Plugins', 'flood') == "kick":
 					kick(name, data["bot_nick"], "flood", data["msg_channel"], irc)
-				if config.get('Plugins', 'flood') == "kick":
+				if config.get('Plugins', 'flood') == "ban":
 					ban(name, data["bot_nick"], "flood", data["msg_channel"], irc)
 				time = 0
 

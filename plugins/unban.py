@@ -6,6 +6,6 @@ def main(data, irc):
 		msg = data["msg"].replace("@unban ", "")
 		end_name = msg.find(" ")
 		if end_name == -1:
-			unban(msg, data["msg_nick"], "No reason", data["msg_channel"], irc)
+			unban(msg, data["msg_nick"], "", data["msg_channel"])
 		else:
 			unban(msg[:end_name], data["msg_nick"], msg[end_name+1:], data["msg_channel"], irc)
