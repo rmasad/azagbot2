@@ -53,7 +53,7 @@ def IrcSend(irc, text):
 	irc.send(str.encode(text))
 
 def kick(kicked, kicker, reason, channel, irc):
-	IrcSend (irc, 'KICK {0} {1}\r\n'.format(channel, kicked))
+	IrcSend (irc, 'KICK {0} :{1}\r\n'.format(channel, kicked))
 	# Registro de la expulsion.
 	logging.basicConfig(level="logging.INFO")
 	logging.info("{0}: {1} make a KICK to {2} becouse {3} in the channel {4}".format(ctime(), kicker, kicked, reason, channel))

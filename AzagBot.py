@@ -39,8 +39,9 @@ except:
 	
 # Connect and loggin
 irc = BotMain.connect(bot_nick, bot_user, bot_password)
-for channel in config.options("Channels"):
-	BotMain.join("#" + channel, config, irc)
+chs = config.options("Channels").get("chans", "#saffire-dev").split(",")
+for channel in chs:
+	BotMain.join(channel, config, irc)
 
 for plugin in config.options("Plugins"):
 	exec("from plugins import {0}".format(plugin))
