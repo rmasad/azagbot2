@@ -1,6 +1,6 @@
 from BotMain import ban
 
-# Funcion para sacar (kick) a alguien del canal
+# Funcion para sacar (akick) a alguien del canal
 def main(data, irc):
 	if "@ban" in data["msg"] and data["msg_user"] in data["ops"]:
 		msg = data["msg"].replace("@ban ", "")
