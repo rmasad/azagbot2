@@ -12,9 +12,7 @@ def main():
 	config.set('Data', 'nick', "AzagBot")
 	config.set('Data', 'user', "NonRegisteredAzagBot")
 	config.set('Data', 'password', "PASSWORD")
-	
-	#config.add_section("Settings")
-	
+
 	config.add_section("Womans")
 	config.set("Womans", "maria", "")
 	config.set("Womans", "juana", "")
@@ -25,9 +23,7 @@ def main():
 	config.set("Operators", "AzagBot", "")
 	
 	config.add_section("Channels")
-	config.set("Channels", "channel_list", '"#saffire-dev, #supremos"')
-	config.set("Channels", "Supremos", "off")
-	config.set("Channels", "saffire-dev", "on")
+	config.set("Channels", "channel_list", '"#saffire-dev:on, #supremos:off"')
 	
 	config.add_section("Plugins")
 	config.set("Plugins", "math", "")

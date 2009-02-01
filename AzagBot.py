@@ -40,8 +40,9 @@ except:
 # Connect and loggin
 irc = BotMain.connect(bot_nick, bot_user, bot_password)
 channel_list = config.get("Channels", "channel_list").replace('"',"").replace(' ',"").split(",")
-for channel in chs:
-	BotMain.join(channel, config, irc)
+for channel in channel_list:
+	channel = channel.split(":")
+	BotMain.join(channel[0], channel[1], config, irc)
 
 for plugin in config.options("Plugins"):
 	exec("from plugins import {0}".format(plugin))
