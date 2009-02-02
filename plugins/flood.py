@@ -12,35 +12,39 @@ def main(data, irc):
 	name = data["msg_nick"]
 	if type_msg == "PRIVMSG":
 		try:
-			flood = open("flood.dat","br")
-			nick = pickle.load(flood)
-			time = pickle.load(flood)
-			flood.close()
-			file = True
+			flood_file = open("plugins/flood.dat","br")
+			flood_array = pickle.load(flood_file)
+			flood_file.close()
 		except:
-			time = 0
-			file = False
-	
-		if not file or nick == name:
-			time += 1
-			flood = open("flood.dat","bw")
+			flood_file = open("plugins/flood.dat","bw")
+			pickle.dump([[channel, name, 0]], flood_file)
+			flood_file.close()
+			return
+		
+		
+		channel_in_list = False
+		
+		for i in range(0,len(flood_array)):
+			if flood_array[i][0] == channel:
+				channel_in_list = True
+				if name == flood_array[i][1]:
+					flood_array[i][2] += 1
+					if flood_array[i][2] == 10:
+						config = configparser.RawConfigParser()
+						config.read('config.cfg')
+						if config.get('Plugins', 'flood') == "kick":
+							kick(name, data["bot_nick"], "flood", data["msg_channel"], irc)
+						if config.get('Plugins', 'flood') == "ban":
+							ban(name, data["bot_nick"], "flood", data["msg_channel"], irc)
+						flood_array[i][2] = 1
+				else:
+					flood_array[i][1] = name
+					flood_array[i][2] = 1
 
-			if time == 10:
-				config = configparser.RawConfigParser()
-				config.read('config.cfg')
-				if config.get('Plugins', 'flood') == "kick":
-					kick(name, data["bot_nick"], "flood", data["msg_channel"], irc)
-				if config.get('Plugins', 'flood') == "ban":
-					ban(name, data["bot_nick"], "flood", data["msg_channel"], irc)
-				time = 0
-
-			pickle.dump(name, flood)
-			pickle.dump(time, flood)
-			flood.close()
-		else:
-			time = 1
-			flood = open("flood.dat","bw")
-			pickle.dump(name, flood)
-			pickle.dump(time, flood)
-			flood.close()
+		if not channel_in_list:
+			flood_array += [[channel, name, 0]]
+		
+		flood_file = open("plugins/flood.dat","bw")
+		pickle.dump(flood_array, flood_file)
+		flood_file.close()
 		
