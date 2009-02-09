@@ -21,7 +21,7 @@ def main(data, irc):
 				   "@get_op": 'Ahora soy operador de {0}.\r\n'.format(channel)}
 	
 	if msg:
-		if user in OPs:
+		if user.lower() in OPs:
 			if msg.lower() in op_response:
 				IrcSend(irc, "PRIVMSG {0} :{1}".format(channel, op_response[msg.lower()]))
 				
