@@ -7,6 +7,6 @@ def main(data, irc):
 	else:
 		if data["msg"] == "JOIN":
 			if data["msg_nick"] in data["womans"]:
-				IrcSend(irc, "PRIVMSG {0} :Hola señora {0}".format(data["msg_channel"], data["msg_nick"]))
+				IrcSend(irc, "PRIVMSG {0} :Hola señora {1}\r\n".format(data["msg_channel"], data["msg_nick"]))
 			else:
-				IrcSend(irc, "PRIVMSG {0} :Hola señor {0}".format(data["msg_channel"], data["msg_nick"]))
+				IrcSend(irc, "PRIVMSG {0} :Hola señor {1}\r\n".format(data["msg_channel"], data["msg_nick"]))
