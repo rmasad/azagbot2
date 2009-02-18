@@ -50,29 +50,29 @@ for plugin in config.options("Plugins"):
 # Funcion principal
 while __name__ == "__main__":
 	try:
-		data = bytes.decode(irc.recv(4096))
-		print(data)
-		
-		type_data, msg, msg_channel, msg_nick, msg_user = BotMain.parse_data(data)
-		if type_data == "PRIVMSG" and msg.lower() == "@exit" and msg_user in ops:
-			exit()
-		
-		parsed_data = {"bot_nick": bot_nick,
-					   "bot_user": bot_user,
-					   "bot_password": bot_password,
-					   "config": config,
-					   "ops": ops,
-					   "womans": womans,
-					   "type_data": type_data,
-					   "msg": msg,
-					   "data": data,
-					   "channel_list": config.options("Channels"),
-					   "msg_channel": msg_channel,
-					   "msg_nick": msg_nick,
-					   "msg_user": msg_user}
-		
-		for plugin in config.options("Plugins"):
-			exec("{0}.main(parsed_data,irc)".format(plugin))
+		for data in bytes.decode(irc.recv(4096)).split("\r\n"):
+			data = data.strip()
+			print(data)
+			type_data, msg, msg_channel, msg_nick, msg_user = BotMain.parse_data(data)
+			if type_data == "PRIVMSG" and msg.lower() == "@exit" and msg_user in ops:
+				exit()
+			
+			parsed_data = {"bot_nick": bot_nick,
+						   "bot_user": bot_user,
+						   "bot_password": bot_password,
+						   "config": config,
+						   "ops": ops,
+						   "womans": womans,
+						   "type_data": type_data,
+						   "msg": msg,
+						   "data": data,
+						   "channel_list": config.options("Channels"),
+						   "msg_channel": msg_channel,
+						   "msg_nick": msg_nick,
+						   "msg_user": msg_user}
+			
+			for plugin in config.options("Plugins"):
+				exec("{0}.main(parsed_data,irc)".format(plugin))
 		
 	except UnicodeDecodeError:
 		logging.basicConfig(level="logging.ERROR")
