@@ -7,13 +7,13 @@ def main(data, irc):
 	nick = data["bot_nick"]
 	channel = data["msg_channel"]
 	OPs = data["ops"]
-	version = 2.2
+	version = 0.2.3
 	response = {'hola {0}'.format(nick.lower()): 'Hola señor {0}\r\n'.format(name),
 				'hi {0}'.format(nick.lower()): 'Hi {0}\r\n'.format(name),
 				'ping': 'pong\r\n',
 				'!v': 'SPIB versión {0}\r\n'.format(version),
 				'!version': 'SPIB versión {0}\r\n'.format(version),
-				"!about": "Soy SPIB (Simple Python3 Irc Bot).\nEstoy bajo la GNU GPL 3.\r\n"}
+				"!about": "Soy SPIB (Simple Python3 Irc Bot).\n\rEstoy bajo la GNU GPL 3.\r\n"}
 		
 	op_response = {'@op': 'El señor {0} ahora es operador de {1}\r\n'.format(name, channel),
 				   '@deop': 'El señor {0} ya no es operador de {1}\r\n'.format(name, channel),
