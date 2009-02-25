@@ -3,19 +3,6 @@ import logging
 from time import ctime
 import configparser
 
-# Funcion que ingresa el usuario al canal
-def connect(nick, user, password, HOST = 'irc.freenode.net', PORT = 6667):
-	irc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	irc.connect((HOST, PORT))
-	irc.send(str.encode('PASS {0}\r\n'.format(password)))
-	irc.send(str.encode('NICK {0}\r\n'.format(nick)))
-	irc.send(str.encode('USER {0} {0} {0} :Python IRC\r\n'.format(user)))
-	return irc
-
-def join(channel, op, config, irc):
-	irc.send(str.encode('JOIN {0}\r\n'.format(channel)))
-	if op.lower() == "on":
-		irc.send(str.encode('PRIVMSG ChanServ :OP {0}\r\n'.format(channel)))
 
 def parse_data(data):
 	if "PRIVMSG" in data:
@@ -48,9 +35,6 @@ def parse_data(data):
 	else:
 		return("OTHER", data.strip(), "irc.freenode.org", "freenode", "freenode")
 
-# Funcion que combierte el string en bytes y envia el texto.
-def IrcSend(irc, text):
-	irc.send(str.encode(text))
 
 def kick(kicked, kicker, reason, channel, irc):
 	IrcSend (irc, 'KICK {0} :{1}\r\n'.format(channel, kicked))

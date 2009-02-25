@@ -1,4 +1,4 @@
-from BotMain import IrcSend
+import irclib
 
 def main(data, irc):
 	msg = data["msg"]
@@ -23,20 +23,20 @@ def main(data, irc):
 	if msg:
 		if user.lower() in OPs:
 			if msg.lower() in op_response:
-				IrcSend(irc, "PRIVMSG {0} :{1}".format(channel, op_response[msg.lower()]))
+				irc.send("PRIVMSG {0} :{1}".format(channel, op_response[msg.lower()]))
 				
 			if msg == '@chao':
-				IrcSend (irc, "QUIT AzagBot {0}\r\n".format(version))
+				irc.send ("QUIT AzagBot {0}\r\n".format(version))
 				exit()
 	
 			if msg == '@op':
-				IrcSend (irc, "PRIVMSG ChanServ :OP {0} {1}\r\n".format(channel, name))
+				irc.send ("PRIVMSG ChanServ :OP {0} {1}\r\n".format(channel, name))
 
 			if msg == '@deop':
-				IrcSend (irc, "PRIVMSG ChanServ :DEOP {0} {1}\r\n".format(channel, name))
+				irc.send ("PRIVMSG ChanServ :DEOP {0} {1}\r\n".format(channel, name))
 			
 			if msg == "@get_op":
-				IrcSend (irc, "PRIVMSG ChanServ :OP {0} {1}\r\n".format(channel, nick))
+				irc.send ("PRIVMSG ChanServ :OP {0} {1}\r\n".format(channel, nick))
 				
 		if msg.lower() in response:
-			IrcSend(irc, "PRIVMSG {0} :{1}".format(channel, response[msg.lower()]))
+			irc.send("PRIVMSG {0} :{1}".format(channel, response[msg.lower()]))

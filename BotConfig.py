@@ -8,6 +8,10 @@ def main():
 	print(":: The default config will be add in config.cfg")
 	config = configparser.RawConfigParser()
 	
+	config.add_section('Server')
+	config.set('Data', 'host', "irc.freedome.net")
+	config.set('Data', 'port', "6667")
+	
 	config.add_section('Data')
 	config.set('Data', 'nick', "AzagBot")
 	config.set('Data', 'user', "NonRegisteredAzagBot")
@@ -23,7 +27,7 @@ def main():
 	config.set("Operators", "AzagBot", "")
 	
 	config.add_section("Channels")
-	config.set("Channels", "channel_list", '"#saffire-dev:on, #supremos:off"')
+	config.set("Channels", "channel_list", '"#saffire-dev, #supremos"')
 	
 	config.add_section("Plugins")
 	config.set("Plugins", "math", "")

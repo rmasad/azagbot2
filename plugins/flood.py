@@ -2,7 +2,7 @@ import configparser
 import pickle
 import logging
 from time import ctime
-from BotMain import IrcSend
+import irclib
 from BotMain import kick, ban
 from time import ctime
 

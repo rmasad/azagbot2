@@ -1,4 +1,5 @@
-from BotMain import IrcSend, join
+from BotMain import join
+import irclib
 
 def main(data, irc):
 		if data["type_data"] == 'KICK' and data["bot_nick"] in data["msg"]:

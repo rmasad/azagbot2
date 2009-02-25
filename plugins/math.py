@@ -1,5 +1,5 @@
 from math import *
-from BotMain import IrcSend
+import irclib
 
 def math(msg, channel, irc):
 
@@ -48,11 +48,11 @@ def math(msg, channel, irc):
 
 	try:
 		if not danger and eval(msg) < 10**100:
-			IrcSend (irc, "PRIVMSG {0} :>> {1}\r\n".format(channel,eval(msg)))
+			irc.send("PRIVMSG {0} :>> {1}\r\n".format(channel,eval(msg)))
 		else:
 			raise NonSafeExpression
 	except:
-		IrcSend (irc, "PRIVMSG {0} :>> Error\r\n".format(channel))
+		irc.send("PRIVMSG {0} :>> Error\r\n".format(channel))
 
 def main(parsed_data, irc):
 	if parsed_data["type_data"] == "PRIVMSG" and '@math' in parsed_data["msg"]:
