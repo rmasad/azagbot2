@@ -17,10 +17,6 @@ def main():
 	config.set('Data', 'user', "NonRegisteredAzagBot")
 	config.set('Data', 'password', "PASSWORD")
 
-	config.add_section("Womans")
-	config.set("Womans", "maria", "")
-	config.set("Womans", "juana", "")
-	config.set("Womans", "elisa", "")
 	
 	config.add_section("Operators")
 	config.set("Operators", "Azag", "")

@@ -4,36 +4,7 @@ from time import ctime
 import configparser
 
 
-def parse_data(data):
-	if "PRIVMSG" in data:
-		msg_nick = data[1:data.find("!")]
-		msg_user = data[data.find("!n=") + 3:data.find("@")]
-		msg = data[data.find("PRIVMSG")+8:].split(" :")[1].strip()
-		msg_channel = data[data.find("PRIVMSG")+8:].split(" :")[0]
-		return ("PRIVMSG", msg, msg_channel, msg_nick, msg_user)
-	elif not 'freenode' in data:
-		if 'JOIN' in data:
-			msg_channel = data[data.find("JOIN")+6:]
-			msg_channel = msg_channel.replace(" :","")
-			return ("SERVERMSG", "JOIN", msg_channel, data[1:data.find("!")], data[data.find("!n=") + 3:data.find("@")])
-		elif 'PART' in data:
-			msg_channel = data[data.find("PART")+6:]
-			msg_channel = msg_channel.replace(" :","")
-			return ("SERVERMSG", "PART", msg_channel, data[1:data.find("!")], data[data.find("!n=") + 3:data.find("@")])
-		elif 'QUIT' in data:
-			msg_channel = data[data.find("QUIT")+6:]
-			msg_channel = msg_channel.replace(" :","")
-			return ("SERVERMSG", "QUIT", msg_channel, data[1:data.find("!")], data[data.find("!n=") + 3:data.find("@")])
-		elif 'KICK' in data:
-			msg_channel = data[data.find("KICK")+6:]
-			msg_channel = msg_channel.split(" ")
-			msg = msg_channel[1]
-			msg_channel = msg_channel[0]
-			return ("KICK", msg.strip(), msg_channel, data[1:data.find("!")], data[data.find("!n=") + 3:data.find("@")])
-		else:
-			return("OTHER", data.strip(), "irc.freenode.org", "freenode", "freenode")
-	else:
-		return("OTHER", data.strip(), "irc.freenode.org", "freenode", "freenode")
+
 
 
 def kick(kicked, kicker, reason, channel, irc):

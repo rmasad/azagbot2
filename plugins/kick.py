@@ -1,11 +1,11 @@
-from BotMain import kick
+import irclib
+class main():
+	def __init__(self, irc):
+		self.irc = irc
+		self.do = irclib.commands(irc)
 
-# Funcion para sacar (kick) a alguien del canal
-def main(data, irc):
-	if "@kick" == data["msg"][:5] and data["msg_user"].lower() in data["ops"]:
-		msg = data["msg"].replace("@kick ", "")
-		end_name = msg.find(" ")
-		if end_name == -1:
-			kick(msg, data["msg_nick"], "No reason", data["msg_channel"], irc)
-		else:
-			kick(msg[:end_name], data["msg_nick"], msg[end_name+1:], data["msg_channel"], irc)
+	def main(self, msg_data, bot_data):
+		if "@kick" == msg_data["msg"][:5] and msg_data["user"].lower() in bot_data["ops"]:
+			msg = msg_data["msg"].replace("@kick ", "")
+			end_name = msg.find(" ")
+			self.do.kick(msg_data["receiver"],msg[:end_name])

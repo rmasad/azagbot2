@@ -1,6 +1,9 @@
-from BotMain import join
 import irclib
 
-def main(data, irc):
-		if data["type_data"] == 'KICK' and data["bot_nick"] in data["msg"]:
-			join(data["msg_channel"], "off", data["config"], irc)
+class main:
+	def __init__(self, irc):
+		self.irc = irc
+
+	def main(self, msg_data, bot_data):
+		if msg_data["type"] == 'KICK' and bot_data["nick"] in msg_data["receiver"].split()[1]:
+			self.irc.join(msg_data["receiver"].split()[0])
