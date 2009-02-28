@@ -18,6 +18,8 @@ import os
 import irclib
 import pluginlib
 import configparser
+import imp
+
 
 __version = 0.3
 
@@ -50,8 +52,6 @@ while __name__ == "__main__":
 		msg_data = irclib.parse(data)
 		msg_data.update({"data":data})
 		plugin.signal(msg_data, bot_data)
-		
-
 		
 	except UnicodeDecodeError:
 		pass

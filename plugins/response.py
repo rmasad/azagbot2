@@ -18,7 +18,7 @@ class main():
 					'ping': 'pong\r\n',
 					'!v': 'SPIB versión {0}\r\n'.format(version),
 					'!version': 'SPIB versión {0}\r\n'.format(version),
-					"!about": "Soy SPIB (Simple Python3 Irc Bot).\n\rEstoy bajo la GNU GPL 3.\r\n"}
+					"!about": "Soy SPIB (Simple Python3 Irc Bot). Estoy bajo la GNU GPL 3.\r\n"}
 			
 		op_response = {'@op': 'El señor {0} ahora es operador de {1}\r\n'.format(name, channel),
 					   '@deop': 'El señor {0} ya no es operador de {1}\r\n'.format(name, channel),
