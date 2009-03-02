@@ -7,5 +7,4 @@ class main():
 	def main(self, msg_data, bot_data):
 		if "@kick" == msg_data["msg"][:5] and msg_data["user"].lower() in bot_data["ops"]:
 			msg = msg_data["msg"].replace("@kick ", "")
-			end_name = msg.find(" ")
-			self.do.kick(msg_data["receiver"],msg[:end_name])
+			self.do.kick(msg_data["receiver"],msg)

@@ -29,44 +29,48 @@ class main:
 	
 	def signal(self, msg_data, bot_data):
 		
-		def start(self, module, receiver):
-			print("START")
-			try:
-				exec("print(dir({0}))".format(module))
-			except:
-				exec("from plugins import {0}".format(module))
-			
-			if module not in self.plugin_list:
-				self.plugin_list += [module]
-				self.do.send(receiver, "{0} started".format(module))
-			else:
-				self.do.send(receiver, "{0} already started".format(module))
-		
-		def stop(self, module, receiver):
-			if module in self.plugin_list:
-				del(self.plugin_list[self.plugin_list.index(module)])
-				self.do.send(receiver, "{0} stoped".format(module))
-			else:
-				self.do.send(receiver, "{0} is not already started".format(module))
-		
-		def restart(self, module, receiver):
-			try:
-				exec("imp.reload({0})".format(module))
-				self.do.send(receiver, "{0} restarted".format(module))
-			except:
-				self.do.send(receiver, "{0} is not already started".format(module))
-				start(self, module, receiver)
-				self.do.send(receiver, "{0} started".format(module))
-				
 		if msg_data["nick"].lower() in bot_data["ops"]:
-			if msg_data["msg"][:7] == "@start ":
-				start(self, msg_data["msg"][7:], msg_data["receiver"])
 
-			if msg_data["msg"][:6] == "@stop ":
-				stop(self, msg_data["msg"][6:], msg_data["receiver"])
-
+			#RESTART
 			if msg_data["msg"][:9] == "@restart ":
-				restart(self, msg_data["msg"][9:], msg_data["receiver"])
+				module = msg_data["msg"][9:]
+				receiver = msg_data["receiver"]
+				try:
+					exec("imp.reload({0})".format(module))
+					self.do.send(receiver, "{0} restarted".format(module))
+				except:
+					self.do.send(receiver, "{0} is not already started".format(module))
+					msg_data["msg"] == "@start {0}".format(module)
+					exec("from plugins import {0}".format(module))
+					if module not in self.plugin_list:
+						self.plugin_list += [module]
+					self.do.send(receiver, "{0} started".format(module))
 
+			#START
+			if msg_data["msg"][:7] == "@start ":
+				module = msg_data["msg"][7:]
+				print(module)
+				receiver = msg_data["receiver"]
+				try:
+					exec("print(dir({0}))".format(module))
+				except:
+					exec("from plugins import {0}".format(module))
+				
+				if module not in self.plugin_list:
+					self.plugin_list += [module]
+					self.do.send(receiver, "{0} started".format(module))
+				else:
+					self.do.send(receiver, "{0} already started".format(module))
+
+			#STOP
+			if msg_data["msg"][:6] == "@stop ":
+				module = msg_data["msg"][6:]
+				receiver = msg_data["receiver"]
+				if module in self.plugin_list:
+					del(self.plugin_list[self.plugin_list.index(module)])
+					self.do.send(receiver, "{0} stoped".format(module))
+				else:
+					self.do.send(receiver, "{0} is not already started".format(module))				
+			
 		for plugin in self.plugin_list:
 			exec("self.{0}.main(msg_data, bot_data)".format(plugin))

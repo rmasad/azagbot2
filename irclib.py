@@ -30,15 +30,12 @@ class main():
 		self.irc.send(str.encode('JOIN {0}\r\n'.format(channel)))
 	
 	def get_data(self):
-		def get_first_data(self):
-			data = self.data_list[0]
-			del self.data_list[0]
-			return data
-			
 		if not self.data_list:
 			self.data_list += bytes.decode(self.irc.recv(4096)).split("\r\n")
 		
-		return get_first_data(self)
+		data = self.data_list[0]
+		del self.data_list[0]
+		return data
 			
 class commands():
 	def __init__(self, irc):
