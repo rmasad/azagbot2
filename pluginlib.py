@@ -22,6 +22,7 @@ class main:
 	def __init__(self, plugin_list, irc):
 		for plugin in plugin_list:
 			exec("from plugins import {0}".format(plugin))
+			exec("self.{0}_module = {0}".format(plugin))
 			exec("self.{0} = {0}.main(irc)".format(plugin))
 		self.plugin_list = plugin_list
 		self.irc = irc
@@ -30,37 +31,45 @@ class main:
 	def signal(self, msg_data, bot_data):
 		
 		if msg_data["nick"].lower() in bot_data["ops"]:
-
+		
 			#RESTART
 			if msg_data["msg"][:9] == "@restart ":
 				module = msg_data["msg"][9:]
 				receiver = msg_data["receiver"]
 				try:
-					exec("imp.reload({0})".format(module))
+					exec("imp.reload(self.{0}_module)".format(module))
+					exec("self.{0} = self.{0}_module.main(self.irc)".format(module))
 					self.do.send(receiver, "{0} restarted".format(module))
 				except:
 					self.do.send(receiver, "{0} is not already started".format(module))
-					msg_data["msg"] == "@start {0}".format(module)
-					exec("from plugins import {0}".format(module))
-					if module not in self.plugin_list:
-						self.plugin_list += [module]
-					self.do.send(receiver, "{0} started".format(module))
+					try:
+						exec("from plugins import {0}".format(module))
+						exec("self.{0}_module = {0}".format(plugin))
+						exec("self.{0} = {0}.main(irc)".format(plugin))
+						self.do.send(receiver, "{0} started".format(module))
+						if module not in self.plugin_list:
+							self.plugin_list += [module]
+					except:
+						self.do.send(receiver, "{0} don't exist".format(module))
 
 			#START
 			if msg_data["msg"][:7] == "@start ":
 				module = msg_data["msg"][7:]
-				print(module)
 				receiver = msg_data["receiver"]
 				try:
-					exec("print(dir({0}))".format(module))
-				except:
-					exec("from plugins import {0}".format(module))
-				
-				if module not in self.plugin_list:
-					self.plugin_list += [module]
-					self.do.send(receiver, "{0} started".format(module))
-				else:
+					exec("imp.reload(self.{0}_module)".format(module))
+					exec("self.{0} = self.{0}_module.main(self.irc)".format(module))
 					self.do.send(receiver, "{0} already started".format(module))
+				except:
+					try:
+						exec("from plugins import {0}".format(module))
+						exec("self.{0}_module = {0}".format(plugin))
+						exec("self.{0} = {0}.main(irc)".format(plugin))
+						self.do.send(receiver, "{0} started".format(module))
+						if module not in self.plugin_list:
+							self.plugin_list += [module]
+					except:
+						self.do.send(receiver, "{0} don't exist".format(module))
 
 			#STOP
 			if msg_data["msg"][:6] == "@stop ":
